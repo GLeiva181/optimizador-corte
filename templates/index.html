@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Optimización de Corte</title>
+</head>
+<body>
+    <h1>Optimización de Corte de Melamina</h1>
+
+    <form method="post">
+        <h3>Placa</h3>
+        Ancho: <input type="number" name="ancho" value="{{ placa['ancho'] }}" required>
+        Alto: <input type="number" name="alto" value="{{ placa['alto'] }}" required>
+        Grosor de corte (hoja sierra): <input type="number" name="grosor_corte" value="{{ grosor_corte }}" min="0">
+        <button type="submit" name="placa">Actualizar</button>
+    </form>
+
+    <form method="post">
+        <h3>Agregar pieza</h3>
+        Ancho: <input type="number" name="p_ancho" required>
+        Alto: <input type="number" name="p_alto" required>
+        Cantidad: <input type="number" name="p_cantidad" min="1" value="1" required>
+        <button type="submit" name="pieza">Agregar</button>
+    </form>
+
+    <form method="post">
+        <button type="submit" name="reset">Borrar todas las piezas</button>
+    </form>
+
+    <h3>Piezas cargadas</h3>
+    <ul>
+        {% for pieza in piezas %}
+            <li>
+                <form method="post" action="{{ url_for('update', index=loop.index0) }}">
+                    Ancho: <input type="number" name="ancho" value="{{ pieza.ancho }}" required>
+                    Alto: <input type="number" name="alto" value="{{ pieza.alto }}" required>
+                    Cantidad: <input type="number" name="cantidad" value="{{ pieza.cantidad }}" min="1" required>
+                    <button type="submit">Actualizar</button>
+                    [<a href="{{ url_for('rotate', index=loop.index0) }}">Rotar</a>]
+                    [<a href="{{ url_for('delete', index=loop.index0) }}">Borrar</a>]
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3>Distribución</h3>
+    {{ graph_html|safe }}
+</body>
+</html>
