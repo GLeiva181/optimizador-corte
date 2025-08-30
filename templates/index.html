@@ -11,7 +11,7 @@
         <h3>Placa</h3>
         Ancho: <input type="number" name="ancho" value="{{ placa['ancho'] }}" required>
         Alto: <input type="number" name="alto" value="{{ placa['alto'] }}" required>
-        Grosor de corte (hoja sierra): <input type="number" name="grosor_corte" value="{{ grosor_corte }}" min="0">
+        Grosor de corte: <input type="number" name="grosor_corte" value="{{ grosor_corte }}" min="0">
         <button type="submit" name="placa">Actualizar</button>
     </form>
 
@@ -23,9 +23,28 @@
         <button type="submit" name="pieza">Agregar</button>
     </form>
 
+    <form method="post" enctype="multipart/form-data">
+        <h3>Importar piezas desde CSV</h3>
+        <input type="file" name="file" accept=".csv" required>
+        <button type="submit" name="importar">Importar</button>
+    </form>
+
+    <form method="get" action="{{ url_for('exportar') }}">
+        <button type="submit">Exportar piezas a CSV</button>
+    </form>
+
     <form method="post">
         <button type="submit" name="reset">Borrar todas las piezas</button>
     </form>
+
+    {% if piezas_no_cabidas %}
+        <h3 style="color:red;">Piezas que no entran en la placa:</h3>
+        <ul>
+            {% for pieza, idx in piezas_no_cabidas %}
+                <li>{{ pieza.ancho }} x {{ pieza.alto }} (cantidad: {{ pieza.cantidad }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <h3>Piezas cargadas</h3>
     <ul>
